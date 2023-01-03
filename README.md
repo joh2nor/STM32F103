@@ -184,19 +184,19 @@ void LED2_Turn(void)
 - 通道数：16个GPIO_Pin，外加PVD输出、RTC闹钟、USB唤醒、以太网唤醒
 - 触发响应方式：中断响应/事件响应
 
-![image-20221224115729670](/Users/puheliang/Library/Application Support/typora-user-images/image-20221224115729670.png)
+![image-20221224115729670](https://gitee.com/pu-heliang/photos/raw/master/img/202301032043708.png)
 
 AFIO选择中断引脚，外部中断的9-5,15-10会触发同一个中断函数，再根据标志位来区分到底是哪个中断进来的
 
 配置数据选择器，只有一个Pin接到EXTI
 
-![截屏2022-12-24 12.00.42](/Users/puheliang/Desktop/截屏2022-12-24 12.00.42.png)
+![image-20230103203938222](https://gitee.com/pu-heliang/photos/raw/master/img/202301032039837.png)
 
 在STM32中AFIO主要完成两个任务：复用功能引脚重映射、中断引脚选择
 
 或、与、非门
 
-![image-20221224120857813](/Users/puheliang/Library/Application Support/typora-user-images/image-20221224120857813.png)
+![image-20221224120857813](https://gitee.com/pu-heliang/photos/raw/master/img/202301032044678.png)
 
 #### EXTI配置步骤
 
@@ -425,14 +425,14 @@ void EXTI1_IRQHandler(void)//线路1中断函数
 
 - STM32的定时器支持级联的模式：一个定时器的输出当做另一个定时器的输入最大定时时间就是59.65s X 65536 X 65536
 
-![image-20221224173356252](/Users/puheliang/Library/Application Support/typora-user-images/image-20221224173356252.png)
+![image-20221224173356252](https://gitee.com/pu-heliang/photos/raw/master/img/202301032044148.png)
 
 - 预分频器（PSC）：对输入的基准频率提前进行一个分频的操作
 - 实际分频系数 = 预分频器的值 + 1，最大可以写65535即65536分频 
 - 计数器（CNT）：也是16位，值可以从0~65535，当计数器的值自增（自减）到目标值时，产生中断，完成定时
 - 自动重装寄存器（）：也是16位当计数值等于自动重装值时，就是计时的时间到了，就会产生一个中断信号，并且清零计数器，计数器自动开始下一次的计数计时，计数值等于自动重装值的中断一般叫做“更新中断”，此更新中断就会通往NVIC，再配置好NVIC的定时器通道，定时器上的更新中断就会得到CPU的响应了，对应的事件叫做“更新事件”，更新事件不会触发中断，但可以触发内部其他电路的工作
 
-![image-20221224174708831](/Users/puheliang/Library/Application Support/typora-user-images/image-20221224174708831.png)
+![image-20221224174708831](https://gitee.com/pu-heliang/photos/raw/master/img/202301032044571.png)
 
 - 从基准时钟，到预分频器，再到计数器，计数器自增，同时不断地与自动重装寄存器进行比较，计数器和自动重装寄存器的值相等时，即计时时间到，这时会产生一个更新中断和更新事件，CPU响应更新中断，就完成了定时中断的任务了。
 
@@ -440,7 +440,7 @@ void EXTI1_IRQHandler(void)//线路1中断函数
 
 使用定时器的主模式，可以把定时器的更新事件映射到触发输出TRGO（Trigger Out）的位置，TRGO直接接到DAC的触发转换引脚上，这样定时器的更新就不需要再通过中断来触发DAC转换了
 
-![image-20221224181213236](/Users/puheliang/Library/Application Support/typora-user-images/image-20221224181213236.png)
+![image-20221224181213236](https://gitee.com/pu-heliang/photos/raw/master/img/202301032044975.png)
 
 缓冲寄存器：某个时刻把预分频器由0改成了1，当计数计到一半的时候改变了分频值，这个变化不会立即生效，而是会等到本次计数周期结束时，产生了了更新事件，预分频器的值才会被传递到缓冲寄存器里面去，才会生效。
 
@@ -803,9 +803,9 @@ void PWM_SetCompare3(uint16_t Compare)
 
 ##### 测频法：在闸门时间T内，对上升沿计次，得到N，则频率
 
-![image-20221226183437986](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226183437986.png)
+![image-20221226183437986](https://gitee.com/pu-heliang/photos/raw/master/img/202301032052812.png)
 
-![image-20221226183513365](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226183513365.png)
+![image-20221226183513365](https://gitee.com/pu-heliang/photos/raw/master/img/202301032044214.png)
 
 测频法：自定一个闸门时间T，通常设置为1s，在1s时间内，对信号上升沿计次，从0开始计，每来一个上升沿，计次+1，每来一个上升沿，其实就是来了一个周期的信号，在1s时间内，来个几个周期，频率就是多少Hz，（频率的定义：1s内出现了多少个重复的周期），这是一种直接按频率定义来测量的方法，闸门时间也可以是2s，计次值除2，就是频率
 
@@ -813,9 +813,9 @@ void PWM_SetCompare3(uint16_t Compare)
 
 ##### 测周法：两个上升沿内，以标准频率计次，得到N，则频率
 
-![image-20221226184746596](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226184746596.png)
+![image-20221226184746596](https://gitee.com/pu-heliang/photos/raw/master/img/202301032052813.png)
 
-![image-20221226184823583](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226184823583.png)
+![image-20221226184823583](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045325.png)
 
 测周法：捕获信号的两个上升沿，测量之间持续的时间，使用一个已知的标准频率的计次时钟，来驱动计数器，从一个上升沿开始计，计数器从0开始，一直计到下一个上升沿，停止，计一个数的时间是1/fc，计N个数时间就是N/fc，N/fc就是周期，再取个倒数，就得到频率的公式，fx = fc/N
 
@@ -827,7 +827,7 @@ void PWM_SetCompare3(uint16_t Compare)
 
 中界频率：测频法与测周法误差相等时的频率点（测频法和测周法的N相同）
 
-![image-20221226193408126](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226193408126.png)
+![image-20221226193408126](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045027.png)
 
 计数次数越多，+-1误差对结果的影响越小
 
@@ -837,7 +837,7 @@ void PWM_SetCompare3(uint16_t Compare)
 
 异或门：当输入引脚的任何一个引脚有电平翻转时，输出引脚就产生一次电平翻转
 
-![image-20221226194451569](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226194451569.png)
+![image-20221226194451569](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045812.png)
 
 输入信号来到输入滤波器（对信号进行滤波，避免高频的毛刺信号误触发）和边沿检测器（可以选择高电平触发，或者低电平触发）
 
@@ -857,7 +857,7 @@ TRC是为了无刷电机的驱动
 
 ##### 主从触发模式：（主模式、从模式和触发源选择三个功能的简称）
 
-![image-20221226201447496](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226201447496.png)
+![image-20221226201447496](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045959.png)
 
 主模式：将定时器内部的信号映射到TRGO引脚，用于触发别的外设。
 
@@ -869,7 +869,7 @@ TRC是为了无刷电机的驱动
 
 ##### 输入捕获基本结构：
 
-![image-20221226202515990](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226202515990.png)
+![image-20221226202515990](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045602.png)
 
 只使用了一个通道，目前只能测量频率，配置好时基单元，启动定时器，CNT就会在预分频之后的时钟驱动下，不断自增，这个CNT就是测周法用来计数计时的，经过预分频之后的时钟频率就是，驱动CNT的标准频率fc，(标准频率 = 72M/预分频系数)，下面输入捕获通道1的GPIO口，输入一个上面的方波信号，经过滤波器和边沿检测，选择TI1FP1为上升沿触发，之后输入选择直连的通道分频器选择不分频，当TI1FP1出现上升沿之后，CNT的当前计数值转运到CCR1里，同时触发源选择，选择TI1FP1选择为触发信号，选中TI1FP1为触发信号，从模式选择复位操作，TI1FP1的上升沿也同样会通过上面的触发源选择那一路，取触发CNT清零，注意是先转运CNT的值到CCR里去，再出发从模式给CNT清零或者是非阻塞的同时转移，CNT的值转移到CCR，同时0转移到CNT里面去，不能是先清零CNT，再捕获，否则捕获值都是0了。
 
@@ -924,7 +924,7 @@ uint32_t IC_GetFreq(void)
 
 ### PWMI基本结构：
 
-![image-20221226204252689](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226204252689.png)
+![image-20221226204252689](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045950.png)
 
 PWMI模式，使用了两个通道捕获一个引脚可以同时测量周期和占空比，TI1FP1配置上升沿触发，触发捕获和清零CNT，TI1FP2，配置为下降沿触发，通过交叉通道，去触发通道2的捕获单元，去触发通道2的捕获单元
 
@@ -1086,7 +1086,7 @@ Encoder Interface编码器接口
 
 把两个编码器的A相和B相，接入STM32，定时器的编码器接口，编码器接口自动控制时基单元中的CNT计数器，进行自增或者自减，例如CNT初始值为0，编码器右转CNT++，右转产生一个脉冲，CNT++,左转CNT--，编码器接口（相当于带有方向控制的外部时钟）同时控制CNT的计数时钟和计数方向，CNT的值就表示了编码器的位置，每隔一段时间取一次CNT的值再把CNT清零，每次取出来的值就带标 了编码器的速度，编码器的测速实际上就是测频法测正交脉冲的频率，CNT计次，每隔一段时间取一次计次，也可以用外部中断来接编码器（用软件资源来弥补硬件资源）
 
-![image-20221226224551844](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226224551844.png)
+![image-20221226224551844](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045516.png)
 
 当编码器的旋转轴转起来时，A相和B相就会输出方波信号，转的越快，方波的频率越高，方波的频率就代表了速度，取出任意一相的信号来测量频率，就能知道旋转速度，只有一相的信号无确定旋转方向。
 
@@ -1100,19 +1100,19 @@ Encoder Interface编码器接口
 
 编码器接口的设计逻辑是：首先把A相和B相的所有边沿作为计数器的计数时钟，出现边沿信号时，就计数自增或者自减，
 
-![image-20221226225908098](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226225908098.png)
+![image-20221226225908098](https://gitee.com/pu-heliang/photos/raw/master/img/202301032045627.png)
 
 编码器接口的两个引脚，借用了输入捕获单元的前两个通道，编码器的输入引脚就是定时器的CH1和CH2两个引脚，信号的通路就是，CH1通过这里，通向编码器接口，CH3和CH4和编码器接口无关，其中CH1和CH2的输入捕获滤波器和边沿检测，编码器接口也有使用，但是后面的是否交叉，预分频器和CCR寄存器，与编码器接口无关，这就是编码器接口的输入部分，编码器接口的输出部分，相当于从模式控制器，控制CNT的计数时钟和计数方向，输出过程就是如果产生边沿信号，并且对应另一相的状态为正转，则控制CNT自增否则控制CNT自减，此时计数时钟和计数方向都处于编码器接口托管的状态，计数器的自增和自减，受编码器的控制。
 
 编码器接口的基本结构：
 
-![image-20221226230733071](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226230733071.png)
+![image-20221226230733071](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046598.png)
 
 输入捕获的前两个通道，通过GPIO口接入编码器的A、B相然后通过滤波器和边沿检测极性选择，产生TI1TP1和TI2FP2，通向编码器接口，编码器接口通过控制预分频器控制CNT计数器的时钟，同时，编码器接口还根据编码器的旋转方向，控制CNT的计数方向，编码器正转时，CNT自增，编码器反转时，CNT自减，一般设置ARR为65535，最大量程
 
 工作模式：
 
-![image-20221226231231784](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226231231784.png)
+![image-20221226231231784](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046208.png)
 
 编码器接口的工作逻辑：TI1FP1和TI2FP2接的就是编码器的A、B相，在A相和B相的上升沿或者下降沿触发计数，向上计数还是向下计数取决于边沿信号发生时，另一相的电平状态（相对信号的电平）
 
@@ -1207,13 +1207,13 @@ STM32F103C8T6 ADC资源：ADC1、ADC2,10个外部输入通道，最多只能测�
 
 ##### 逐次逼近型ADC的内部结构
 
-![image-20221228125552084](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228125552084.png)
+![image-20221228125552084](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046412.png)
 
 这个图是ADC0809的内部结构图，它是一个独立的8位逐次 逼近型ADC芯片，左边IN0~到IN7，是8路输入通道，通过通道选择开关，选中一路，输入到比较器上方进行转换，下面部分是地址锁存和译码，就是想选中哪一路，就把通道号放在这三个引脚上，然后给一个锁存信号，上面对应的通路开关就自动拨好了，相当于可以通过模拟信号的数据选择器，因为ADC转换是一个非常快的过程，给个开始信号，过个几个us就转换完成了想转换多路信号，那不必设计多个AD转换器，只需要一个AD转换器，然后加一个多路选择开关，想转换哪一路，选中对应通道，然后再开始转换就行了，这就是输入通道选择的部分，这个ADC0809只有8个输入通道，STM32内部的ADC是有18个输入通道，对应的是18路输入的多路开关，输入信号选好后，到电压比较器，它可以判断两个输入信号电压的大小关系，输出一个高低电平指示谁大谁小，它的两个输入端，一个是待测的电压，另一个是DAC的电压输出端，DAC是数模转换器，给一个数据，就可以输出数据对应的电压，DAC内部是适应加权电阻网络来实现的转换，将外部输入的未知的电压和一个已知输出的电压，两个同时输入到电压比较器，进行大小判断，如果DAC输出的电压比较大，就调小DAC数据，如果DAC输出的电压比较小，就增大DAC数据，直到DAC输出的电压和外部通道输入的电压近似相等，这样DAC输入的数据就是外部电压的编码数据了，这就是DAC的实现原理，电压调节的过程是逐次逼近SAR来完成的，为了最快找到未知电压的编码，通常会使用二分法进行寻找，EOC（End Of Convert）是转换结束信号，START是开始转换，给一个输入脉冲，开始转换，CLOCK是ADC时钟，因为ADC内部是一步一步进行判断的，所以需要时钟来推动这个过程，下面VREF+和VREF-是DAC的参考电压，例如给一个数据255，是对应5V还是3.3V就由参考电压决定，这个DAC的参考电压也决定了，ADC的输入范围，所以他也是ADC参考电压，左边是整个芯片电路的供电，VCC和GND，通常参考电压的VCC是一样的，会接在一起，参考电压的负极和GND也是一样的，也接到一起，一般情况下ADC输入电压的范围就和ADC的供电是一样的。
 
 ##### STM32的ADC：
 
-![image-20221228131906698](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228131906698.png)
+![image-20221228131906698](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046864.png)
 
 左边是ADC的输入通道、包括16个GPIO口，IN0~IN15，和两个内部的通道，一个是内部温度传感器，另一个是VREFINT（V Reference Internal），内部参考电压，总共是18个输入通道，然后到达模拟多路开关，可以指定想要的通道，右边是多路开关的输出，进入到模数转换器，转化结果会放在数据寄存器中，读取寄存器就能知道ADC转换的结果了，对于普通的ADC，多路开关一般都是只选中一个的，就是选中某个通道、开始转换、等待转换完成、取出结果，这是普通的流程，但是STM32就可以同时选中多个，在转换的时候，还分成了两个组，规则通道组和注入通道组，规则组可以一次最多选中16个通道，注入组最多可以选中4个通道，就像是去餐厅点菜，普通的ADC是，你指定一个菜，老板给你做，然后做好了送给你，而这里是，你指定一个菜单，这个菜单最多可以填16个菜，然后直接递个菜单给老板，老板就按照菜单的顺序依次做好，一次性给你端上来，这样的话就可以大大提高效率，当然菜单也可以只写一个菜，这样这个菜单就简化成普通模式了，对于这个菜单也有两种，一种是规则组菜单，可以同时上16个菜，但是规则组只有一个数据寄存器，就是桌子比较小，最多只能放一个菜，如果上16个菜，前15个菜都会被挤掉，只能的到第16个菜，所以对于规则组转换来说，如果使用这个菜单的话，最好配合DMA来实现，DMA是一个数据转运小帮手，它可以在每上一个菜之后，把这个菜挪到其他地方去，防止被覆盖，规则组虽然可以同时转换16个通道，但是数据寄存器只能存一个结果，如果不想之前的结果被覆盖，那在转换完成之后，就要尽快把结果拿走，注入组，相当于是餐厅的VIP座位，在这个座位上一次最多可以点4个菜，并且数据寄存器有4个可以同时上4个菜，对于注入组而言，就不用担心数据覆盖的问题了，这就是规则组和注入组的介绍，一般情况下，使用规则组就足够了，如果要使用规则组的菜单，那就配合DMA转运数据，这样就不用担心数据覆盖的问题了。
 
@@ -1221,13 +1221,13 @@ STM32F103C8T6 ADC资源：ADC1、ADC2,10个外部输入通道，最多只能测�
 
 ##### ADC基本结构
 
-![image-20221228141007759](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228141007759.png)
+![image-20221228141007759](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046518.png)
 
 左边是输入通道，16个GPIO口，外加两个内部的通道，然后进入AD转换器，AD转换器里有两个组，一个是规则组，一个是注入组，规则组最多可以选择16个通道，注入组最多可以选择4个通道，转换的结果有放在AD数据寄存器中，其中规则组只有1个数据寄存器，注入组有4个数据寄存器，下面是触发控制，提供开始转换的的START信号，触发控制可以选择软件触发和硬件触发，硬件触发主要是来自于定时器，当然也可以选择外部中断的引脚，右边是来自RCC的ADC时钟CLOCK，ADC逐次比较的过程就是由此时钟推动，上面可以布置一个模拟看门狗用于检测转换的结果的范围，如果超出设定的阈值，就通过中断输出控制，向NVIC申请中断，规则组和注入组在转换完成后会有个EOC信号，会置一个标志位，也可以通向NVIC，右下角是开关控制，在库函数中，就是ADC_Cmd函数，用于ADC上电的。
 
 ##### 输入通道：
 
-![image-20221228141929856](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228141929856.png)
+![image-20221228141929856](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046469.png)
 
 双ADC模式：就是ADC1和ADC2一起工作，可以配合组成同步模式，交叉模式等等模式，交叉模式就是ADC1和ADC2交叉的对一个通道进行采样，这样可以提高采样率。
 
@@ -1235,37 +1235,37 @@ STM32F103C8T6 ADC资源：ADC1、ADC2,10个外部输入通道，最多只能测�
 
 ##### 单次转换、非扫描模式
 
-![](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228142620502.png)
+![](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046631.png)
 
 在非扫描模式下，这个菜单只有第一个序列1的位置有效，这时菜单同时选择一组的方式就退化成简单的选中一个的方式了，我们可以在序列1的位置指定我们想转换的通道，比如通道2，然后就可以触发转换，ADC就会对这个通道2进行模数转换，过一小段时间后，转换完成，转换结果放在数据寄存器里，同时给EOC标志位置1，整个转换过程就结束了。判断这个标志位，如果转换完了，就可以在数据寄存器中读取结果了。如果想再启动一次转换，那就需要再触发一次。转换结束，置EOC标志位，读结果。如果想换一个通道转换，那在转换之前，把第一个位置通道2改成其他通道，然后再启动转换。
 
 ##### 连续转换、非扫描模式
 
-![image-20221228143332282](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228143332282.png)
+![image-20221228143332282](https://gitee.com/pu-heliang/photos/raw/master/img/202301032046752.png)
 
 非扫描模式，所以菜单列表就只用第一个，与上次单次转换不同的是，它在一次转换结束后不会停止，而是立刻开始下一轮转换，然后一直持续下去，这样就只需要触发一次，之后就可以一直转换了。这个模式的好处就是，开始转换之后不需要等待一段时间，它一直都在转换，不需要手动开启转换了。也不用判断是否结束，想要读AD值的时候，就直接从数据寄存器取就行。
 
 ##### 单次转换、扫描模式
 
-![image-20221228172651369](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228172651369.png)
+![image-20221228172651369](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048367.png)
 
 这个模式也是单次转换，所以每触发一次，转换结束后，就会停下来，下次转换就得再触发才能开始，他是扫描模式，这就会用到这个菜单列表了，可以在菜单里点菜，比如第一个菜是通道2，第二个菜是通道5，等等，这里每个位置是通道几可以任意指定，并且也是可以重复的，初始化结构体里还有个参数，就是通道数目，因为这16个位置可以不用完，只用前几个，那就需要再给个通道数目的参数，告诉他，我有几个通道，这里指定通道7，那它就只看前7个位置，然后每次触发之后，它就依次对前7个位置进行AD转换，转换结果都放在数据寄存器中，为了防止数据被覆盖，就需要用DMA及时将数据挪走，7个通道转换完成后，产生EOC信号，转换结束，然后再触发下一次，就又开始新一轮的转换，这就是单次转换，扫描模式的工作流程。
 
 ##### 连续转换、扫描模式
 
-![image-20221228173637254](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228173637254.png)
+![image-20221228173637254](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048094.png)
 
 在上一次模式的基础上，可以在一次转换完成后，立刻开始下一次的转换。在扫描模式的情况下，还可以右边一种模式，叫间断模式，它的作用是，在扫描的过程中，每隔几个转换，就暂停一次，需要再次触发，才能继续
 
 ##### 触发控制：
 
-![image-20221228173918884](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228173918884.png)
+![image-20221228173918884](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048244.png)
 
 这个表就是规则组的触发源，在这个表里有来自定时器的信号，还有来自引脚或者定时器的信号，具体是引脚还是定时器，需要AFIO重映射来确定，最后是软件控制位，也就是软件触发，这些触发信号可以配置右边的寄存器来完成，库函数直接给一个参数就行。
 
 ##### 数据对齐
 
-![image-20221228174146250](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228174146250.png)
+![image-20221228174146250](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048436.png)
 
 这个ADC是12位的，它的转换结果就是一个12位的数据，但是这个数据寄存器是16位的，所以就存在一个数据对齐的问题，分为两种对齐方式，数据右对齐，和数据左对齐，数据右对齐就是12位的数据向右靠，高位多出来的几位就补0，第二种是数据左对齐，是12位的数据向左靠，低位多出来的几位就补0，我们一般使用的都是数据右对齐，这样读取这个16位寄存器，直接就是转换结果，如果选择左对齐，直接读的话，得到的数据会比实际的大，因为数据左对齐实际上就是把数据左移了4次，二进制的数据，数据左移一次，就等效于把这个数据乘2，左移4次，就相等于把结果乘16了，所以直接读会比实际值大16倍，左对齐的作用就是，不需要高分辨率时，就可以选择左对齐再把后面的低4位去掉，这个12位的ADC就退化成8位的ADC了。
 
@@ -1289,7 +1289,7 @@ ADC有一个内置自校准模式。校准可大幅减小因内部电容器组�
 
 ##### 硬件电路
 
-![image-20221228175818636](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228175818636.png)
+![image-20221228175818636](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048081.png)
 
 电位器的两个固定端，一端接3.3V，另一端接GND，这样中间的滑动端就可以输出一个0~3.3V可调的电压输出了，这里可以接ADC的输入通道例如PA0口，当滑动端往上滑时，电压增大，往下滑时，电压减小，电阻的阻值不能给太小，因为它是直接接在电源正负极上的，阻值太小，这个电阻就会很费电，再小可能就发热冒烟了，一般要接K欧级的电阻
 
@@ -1299,7 +1299,7 @@ ADC有一个内置自校准模式。校准可大幅减小因内部电容器组�
 
 ##### ADC初始化步骤
 
-![image-20221228184655915](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228184655915.png)
+![image-20221228184655915](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048997.png)
 
 第一步，开启RCC时钟，包括ADC和GPIO的时钟，ADCCLK的分频器，也需要配置一下
 
@@ -1555,7 +1555,7 @@ uint16_t AD_GetValue(uint8_t ADC_Channel)
 
 ##### 存储器映像
 
-![image-20221228215059578](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228215059578.png)
+![image-20221228215059578](https://gitee.com/pu-heliang/photos/raw/master/img/202301032048812.png)
 
 计算机系统的5大组成部分：运算器、控制器、存储器、输入设备和输出设备，运算器和控制器一般合在一起叫做CPU，计算机的核心关键部分就是CPU和存储器，存储器最重要的是存储器的内容和存储器的地址。
 
@@ -1563,7 +1563,7 @@ uint16_t AD_GetValue(uint8_t ADC_Channel)
 
 ##### DMA的框图
 
-![image-20221228220437956](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228220437956.png)
+![image-20221228220437956](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049778.png)
 
 左上角是Cortex-M3内核，里面包含了CPU和内核外设，剩下的所有东西都可以看成是存储器，Flash是主闪存，SRAM是运行内存，各个外设都可以看成是寄存器，也是一种SRAM存储器，寄存器是一种特殊的存储器，一方面，CPU可以对寄存器进行读写，就像读写运行内存一样，另一方面，寄存器的每一位背后，都连接了一根导线，这些导线可以控制外设电路的状态，比如置引脚的高低电平，导通和断开、切换数据寄存器，或者多位结合起来，当做计数器、数据寄存器，寄存器是连接软件和硬件的桥梁，软件读写寄存器，就相当于在控制硬件的执行，使用DMA进行数据转运，就相当于从某个地址取内容，再放到另一个地址去。
 
@@ -1573,7 +1573,7 @@ Flash是ROM只读存储器的一种，如果通过总线直接访问的话，无
 
 ##### DMA的基本结构图
 
-![image-20221228222645589](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228222645589.png)
+![image-20221228222645589](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049195.png)
 
 DMA的数据转运可以从外设到存储器，也可以是从存储器到外设，也可以从存储器转运到存储器，外设和存储器两个站点，都有3个参数，第一个是起始地址，有外设端的起始地址，和存储器端的起始地址，这两个参数决定了数据时从哪里来，到哪里去的，第二个参数是数据宽度，这个参数的作用是，指定一次转运要按多大的数据宽度来进行，可以选择字节Byte、半字节HalfWord和字Word每，字节就是8位转运一个uint8_t，半字节是16位uint16_t，字是32位uint32_t,例如ADC的数据，ADC的数据是uint16_t，所以参数就要选择半字节，依次转运一个uint16_t，第三个参数是地址是否自增，这个参数的作用是，指定一次转运完成后，下一次转运，是不是要把地址移动到下一个位置去，相当于是指针p++，比如ADC扫描模式，用DMA转运数据，外设地址是ADC_DR寄存器，寄存器这边，显然地址是不用自增的，如果自增下一次转运就跑到别的寄存器那里了，存储器这边地址就需要自增，每转运一个数据后，就往后挪个坑，要不然下次再转就把上次的覆盖掉了，这就是地址是否自增的作用，就是指定是否转运一次就挪个坑。
 
@@ -1587,25 +1587,25 @@ DMA进行转运的条件：第一，开关控制，DMA_Cmd必须使能，第二�
 
 ##### DMA请求
 
-![image-20221228230043966](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228230043966.png)
+![image-20221228230043966](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049883.png)
 
 此图是DMA1的请求映像，下面是DMA的7个通道，每个通道都有一个数据选择器，可以选择一年触发和软件触发，左边的硬件触发源，每个通道的硬件触发源都是不同的，如果想选择ADC1来触发必须选择通道1，如果想选择TIM2的更新事件来触发的话，那就必须选择通道2，每个通道的硬件触发源都不同，如果想使用某个硬件触发源的话，就必须使用它所在的通道。如果使用软件触发那通道就可以任意选择。如果要使用ADC1，那就有个库函数ADC_DMACmd，必须使用这个库函数开启ADC1的这一路输出，它才有效，如果想要选择定时器2的通道3那也会有个TIM_DMACmd函数，用来进行DMA输出控制，触发源具体选择哪个，取决于你把哪个外设的DMA输出开启了，如果都开启了，那是一个或门，理论上三个硬件都可以触发，一般情况下，都是开启其中一个，这7个触发源，进入到仲裁器，进行优先级判断，最终产生内部的DMA1请求，默认优先级是通道号越小，优先级越高，也可以在程序中配置优先级
 
 ##### 数据宽度与对齐
 
-![image-20221228231138118](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228231138118.png)
+![image-20221228231138118](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049212.png)
 
 第一列是源端宽度，第二列是目标宽度，第三列是传输数目，当源端宽度和目标宽度都是8位时，转运第一步在源端的0位置，读数据B0，在目标的0位置，写数据B0，之后就是把B1，从左边挪到右边，接着B2、B3，这是源端和目标都是8位的情况，操作也很正常，继续就是源端是8位，目标是16位，它的操作就是，在源端读B0，在目标写00B0，之后读B1写00B1，等等，意思就是如果目标宽度，比源端的数据宽度大那就在目标数据前面多出来的空位补0，之后8位转运到32位，也是一样的处理，前面空出来的都补0，当目标数据宽度，比源端数据宽度小时，比如由16位转到8位现象就是，读B1B0，只写入B0，读B3B2，只写入B2，把多出来的高位舍弃掉，意思就是如果你把小的数据转到大的里面，高位就会补0，如果把大的数据转到小的里面去，高位就会舍弃掉，如果数据宽度一样，那就没事。
 
 ##### 数据转运+DMA
 
-![image-20221228232030872](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228232030872.png)
+![image-20221228232030872](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049790.png)
 
 将SRAM中的数组DataA，转运到另一个数组DataB中，参数配置：外设地址是DataA数组的首地址，存储器地址，给DataB数组的首地址，数据宽度，两个数组的类型都是uint8_t，所以数据宽度都是按8位的字节传输，两个站点的地址都自增，转运完成后DataB数组的所有数据。就会等于DataA数组。如果左边不自增，右边自增，，转运完成后，DataB的所有数据都会等于DataA[0]，如果左边自增，右边不自增，DataB[0]等于DataA的最后一个数，DataB其他的数不变，如果左右都不自增，那就是DataA[0]转到DataB[0]，其他的数据不变。方向参数，是外设站点转运到存储器站点。传输计数器给7，不需要自动重装，触发选择部分选择软件触发，最后调用DMA_Cmd，给DMA使能，转运7次后，传输计数器自减到0，DMA停止，转运完成，这里的数据转运是一种复制转运，转运完成后的DataA的数据并不会消失。
 
 ##### ADC扫描模式+DMA
 
-![image-20221228233025173](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228233025173.png)
+![image-20221228233025173](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049962.png)
 
 左边是ADC扫描模式的转运流程，触发一次，7个通道依次进行AD转换，然后把转换结果都放在ADC_DR寄存器里面，在每个单独的通道转换完成后，进行一次DMA数据转运，并且目的地址进行自增，防止数据被覆盖，DMA的配置，外设地址，写入ADC_DR这个寄存器的地址，存储器的地址，可以在SRAM中定义一个数组ADValue然后把ADValue的地址当做存储器的地址，之后数据宽度，因为ADC_DR和SRAM数组需要uint16_t的数据，所以数据宽度都是16位的半字传输，外设地址不自增，存储器地址自增，传输方向，是外设站点到存储器站点，传输计数器和通道数一样，通道有7个，所以计数7次，计数器知否重装，看ADC的配置，ADC如果是单次扫描，那DMA的传输计数器可以不自动重装，转换一轮就停止，如果ADC是连续扫描，那DMA就可以选择使用自动重装，在ADC启动下一轮的转换的时候，DMA也启动下一轮的转运，ADC和DMA同步工作，触发选择ADC的硬件触发，ADC扫描模式在单个通道完成转换后，不会置任何标志位，也不会产生中断，但是会产生DMA请求，去触发DMA转运。一般来说DMA最常用的用途就是配合ADC的扫描模式，来解决ADC固有的缺陷，数据覆盖的问题。
 
@@ -1772,11 +1772,11 @@ void AD_Init(void)
 - 当电平标准不一致时，需要加电平转换芯片
 - 复杂一点的串口通信还有时钟引脚、硬件流控制的引脚
 
-![image-20221227204837052](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227204837052.png)
+![image-20221227204837052](https://gitee.com/pu-heliang/photos/raw/master/img/202301032043640.png)
 
 ##### 串口参数及时序
 
-![image-20221227205148050](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227205148050.png)
+![image-20221227205148050](https://gitee.com/pu-heliang/photos/raw/master/img/202301032049654.png)
 
 串口数据帧的整体结构：串口中，每一个字节都装载在一个数据帧里面，每个数据帧都由起始位、数据位和停止位组成，数据位有8个，代表一个字节的8位，还可以在数据位的最后加一个奇偶校验位，这样数据位总共就是9位，其中有效载荷时前8位，代表1个字节，校验位跟在有效载荷后面，占1位
 
@@ -1792,7 +1792,7 @@ void AD_Init(void)
 
 数据位：有两种表示方法，一种是把校验位作为数据位的一部分，另一种就是把校验位和数据位独立开，数据位就是有效载荷，校验位就是独立的1位，在串口助手里就是选择的把数据位和校验位分开描述的方法，总之无论是合在一起，还是分开描述，描述的都是同一个东西
 
-![image-20221227213228380](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227213228380.png)
+![image-20221227213228380](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050854.png)
 
 第一个波形：这个波形是发送一个数据0x55时，在TX引脚输出的波形，波特率是9600，每一位的时间就是1/9600，大概是104us，没发送数据的时候是空闲状态高电平，数据帧开始，先发送起始位，产生下降沿，代表数据帧开始，数据0x55转为2进制，低位先行，就是依次发送1010 1010，然后参数是，1位停止，无校验，所以数据帧之后就是停止位，把引脚置回高电平，在STM32中，这个根据字节数据翻转高低电平，是由USART外设自动完成的，不用我们管，也可以软件模拟产生这样的波形，定时器定一个104us的时间，时间到之后，按照数据帧要求，调用GPIO_WriteBit置高低电平，产生一个一模一样的波形，也可以完成串口通信，在TX引脚发送就是置高低电平，在RX引脚接收就是读取高低电平，这也可以由USART外设完成，如果想软件模拟的话那就是定时调用GPIO_ReadInputDataBit来读取每一位，接收的时候也需要一个外部中断，在起始位的下降沿触发，进入接收状态，并且对其采样时钟，然后依次采样8次，这就是接受的逻辑
 
@@ -1814,7 +1814,7 @@ USART是STM32内部集成的硬件外设，可根据数据寄存器的一个字�
 
 STM32F103C8T6 USART资源：USART1、USART2、USART3，USART1是APB2总线的设备，USART2,3是APB1总线的设备
 
-![image-20221227221317657](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227221317657.png)
+![image-20221227221317657](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050963.png)
 
 SW_RX、IRDA_OUT/IN这些是智能卡和IrDA通信的引脚
 
@@ -1838,19 +1838,19 @@ SW_RX、IRDA_OUT/IN这些是智能卡和IrDA通信的引脚
 
 ##### USART的基本结构
 
-![image-20221227231140269](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227231140269.png)
+![image-20221227231140269](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050891.png)
 
 最左边的是波特率发生器，用于产生约定的通信速率，时钟来源是PCLK2或1，经过波特率发生器分频后，产生的时钟通向发送控制器和接收控制器，发送控制器和接收控制器用来控制发送移位和接收移位，之后由发送数据寄存器和发送移位寄存器这两个寄存器的配合，将数据一位一位的移出去，通过GPIO口的复用输出，输出到TX引脚，产生串口协议规定的波形，这个移位寄存器是向右移的，是低位先行，当数据由数据寄存器转移到移位寄存器时，会置一个TXE的标志位，通过判断这个标志位，就可以知道是不是可以写入下一个数据了，接收部分也是类似的，RX引脚的波形，通过GPIO输入，在接收控制器的控制下，一位一位地移入接收移位寄存器，移完一帧数据后，数据就会统一转运到接收数据寄存器，在转移的同时，置一个RXNE标志位，检查这个标志位，就可以知道是不是收到数据了，同时这个标志位也可以去申请中断，这样就可以在收到数据时，直接进入中断函数，快速的读取和保存数据，虽然有四个寄存器但是在软件层面上，只有一个DR寄存器可以供我们读写，写入DR时，数据走上面这条路，进行发送，读取DR时，数据走下面这条路，进行接收，这就是USART进行串口数据收发的过程，右下角是个开关控制。
 
-![image-20221227234306675](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227234306675.png)
+![image-20221227234306675](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050078.png)
 
 四种选择：9位字长，有校验或无校验，8位字长有校验或者无校验，最好选择9位字长，有校验或者8位字长无校验，这样每一帧的有效载荷都是1字节，
 
-![image-20221227234437636](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227234437636.png)
+![image-20221227234437636](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050088.png)
 
 STM32的串口可以配置停止位为0.5、1、1.5、2，这四种参数的区别，就是停止位的时长不一样，1位停止位，这时停止位的时长就和数据位的一位，时长一样，1.5停止位就是数据位一位，时长的1.5倍，2个停止位，那停止位时长就是2倍，0.5个停止位，时长就是0.5倍，一般选择1位停止位。
 
-![image-20221227234843163](/Users/puheliang/Library/Application Support/typora-user-images/image-20221227234843163.png)
+![image-20221227234843163](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050872.png)
 
 串口的输出TX比输入RX简单很多，输出就定时翻转TX引脚高低电平就可以，输入不仅要保证采样频率和波特率一致，还要保证每次输入采样的位置，要正好处于每一位的正中间，只有在每一位的正中间采样，这样高低电平读进来，才是最可靠的，如果采样点过于靠前或者靠后，那有可能高低电平正在翻转，电平还不稳定，或者稍有误差，数据就采样错了，输入最好还要对噪声有一定的判断能力，如果是噪声，最好能置个标志位提醒一下，STM32设计的输入电路，上图展示的是USART的起始位侦测，当输入电路侦测到一个数据帧的起始位后，就会以波特率的频率，连续采样一帧数据，同时，从起始位开始，采样位置就要对齐到位的正中间，只要第一位对齐了，后面都是对齐的，为了实现这些功能对输入的电路对采样时钟进行了细分，它会以波特率的16倍频率进行采样，也就是在一位地时间里，可以进行16次采样，它的策略是最开始，空闲状态高电平，那采样就一直是1，在某个位置突然采集到一个0，那么就说明在这两次采样之间，出现了下降沿，如果没有任何噪声，那之后就应该是起始位了，在起始位，会进行连续16次采样，没有噪声的话，这16次采样，肯定都是0，实际电路有噪声，即使出现下降沿了，后序也要再采样几次，以防万一，这个接收电路还会再下降沿之后的第3次、5次、7次，进行一批采样，在第8次、9次、10次，再进行一批采样，且这两批采样，都要要求每3位里面至少有2个0，没有噪声就全是0，满足情况，如果有轻微的噪声，导致3位里面，只有两个0，另一个是1，也算是检测到了起始位，但是在状态寄存器里会置一个NE（Noise Error），噪声标志位，提醒一下，数据收到了，但是有噪声，如果3位里面只有一个0，就不算检测到了起始位，这时电路就忽略前面的数据，重新开始捕捉下降沿，这就是STM32的串口，在接收过程中，对噪声的处理，如果通过了这个起始位侦测，那接收状态就由空闲，变为接收起始位，同时，第8、9、10次采样的位置，就正好是起始位的正中间，之后接收数据位时，就都在第8、9、10次，进行采样，这样就能保证采样位置在位的正中间了，这就是起始位侦测和采样位置对齐的策略
 
@@ -2085,13 +2085,13 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 ##### 串口收发Hex数据包
 
-![image-20221228025831646](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228025831646.png)
+![image-20221228025831646](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050993.png)
 
 
 
 ##### 串口收发文本数据包
 
-![image-20221228031427199](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228031427199.png)
+![image-20221228031427199](https://gitee.com/pu-heliang/photos/raw/master/img/202301032050392.png)
 
 ##### 数据包的收发流程
 
@@ -2101,7 +2101,7 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 接收固定包长的数据包，设计一种能够记住不同状态的机制，在不同状态执行不同的操作，同时还要进行状态的合理转移，这种程序设计思维叫做“状态机”。
 
-![image-20221228032032420](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228032032420.png)
+![image-20221228032032420](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051259.png)
 
 第一个状态是等待包头，第二个状态是接收数据，第三个状态是等待包尾，每个状态需要一个变量来标志一下，类似于置置标志位，标志位只有0和1，状态机是多标志位的一种方式
 
@@ -2109,7 +2109,7 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 状态机使用的基本步骤：先根据项目要求，画几个圈，考虑好各个状态在什么情况下会进行转移，如何转移，画好线和转移条件，最后根据图来进行编程，例如，做个菜单，按什么键，切换什么菜单，执行什么程序。
 
-![image-20221228033422462](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228033422462.png) 
+![image-20221228033422462](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051552.png) 
 
 ### I2C
 
@@ -2123,11 +2123,11 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 - 每个时序单元的SCL都是以低电平开始，低电平结束
 - 从机不允许产生起始和终止
 
-![image-20221225003129365](/Users/puheliang/Library/Application Support/typora-user-images/image-20221225003129365.png)
+![image-20221225003129365](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051634.png)
 
 - 发送一个字节：SCL低电平期间，主机将数据位依次放到SDA线上（高位先行），然后释放SCL，从机将在SCL高电平期间读取数据位，所以SCL高电平期间SDA不允许有数据变化，依次循环上述过程8次即可发生一个字节
 
-![image-20221226205443369](/Users/puheliang/Library/Application Support/typora-user-images/image-20221226205443369.png)
+![image-20221226205443369](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051462.png)
 
 - 主机拉低SCL，把数据放在SDA上，主机松开SCL，从机读取SDA的数据
 
@@ -2135,14 +2135,14 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 - 接收一个字节：SCL低电平期间，从机将数据位依次放到SDA线上（高位先行），然后释放SCL，主机将在SCL高电平期间读取数据位，所以SCL高电平期间期间SDA不允许有数据变化，依次循环上述过程8次，即可接收一个字节（主机再接收之前，需要释放SDA，释放SDA就相当于切换为输入模式）。
 
-![image-20221225004611284](/Users/puheliang/Library/Application Support/typora-user-images/image-20221225004611284.png)
+![image-20221225004611284](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051676.png)
 
 - 也可以理解为：所有设备包括主机始终都属于输入模式，当主机需要发送的时候，就可以去主动拉低SDA，而主机再被动接收的时候，就必须先释放SDA，总线是线与的特征，任何一个设备拉低了，总线就是低电平，如果接收的时候还拽着SDA不放手，无论别人发什么数据，总线都始终属于是低电平。
 
 - 发送应答：主机在接收完一个字节之后，在下一个时钟发送一位数据，数据0表示应答，数据1表示非应答
 - 接收应答：主机在发送完一个字节之后，在下一个时钟接收一位数据，判断从机是否应答，数据0表示应答，数据1表示非应答（主机在接收之前，需要释放SDA）
 
-![image-20221225005553172](/Users/puheliang/Library/Application Support/typora-user-images/image-20221225005553172.png)
+![image-20221225005553172](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051606.png)
 
 - 也可以理解为发送1位和接收1位，这一位用来作为应答，在发送完一个数据之后，就要立即进行接收应答，来判断从机是否接收到主机发送的数据
 - 主机在起始条件之后，要先发送一个字节叫一下从机名字，所有从机都会收到第一个字节，与自己的名字（地址）比较，如果一样，相对应的从机就会响应主机的读写操作，在同一条I2C总线里，挂在的每个设别地址必须不一样，防止主机叫一个地址有多个设备都响应。
@@ -2158,7 +2158,7 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 - 空闲状态下两个总线都是高电平，主机需要给从机写入数据的时候，在SCL高电平期间，拉低SDA，产生起始条件，在起始条件之后紧跟的时序，必须是发送一个字节的时序，字节的内容必须是从机地址+读写位，（从机地址是7位，读写位是1位加起来就是1个字节8位）（发送从机地址：确定通信的对象），（发送读写位：确认接下来是要写入还是读出，0：写入，1：读出），紧跟着的单元是接收从机的应答位(Receive Ack,RA),这个时刻主机需要释放SDA，如果从机应答，从机会立即拉低SDA，应答位产生后，从机释放SDA，从机交出SDA的控制权，同样的时序再来一遍，第二个字节数据就会送入指定数据的内部，一般第二个字节是寄存器地址或者是指令控制字，第三个字节是想要往寄存器地址中写入的值，如果主机不想发送数据了，要产生停止条件，在产生停止条件之前，先拉低SDA，会后续的上升沿做准备，然后释放SCL，再释放SDA，产生SCL高电平期间SDA的上升沿
 
-![image-20221228195109520](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228195109520.png)
+![image-20221228195109520](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051953.png)
 
 - 此数据帧的作用是：对于从机地址为1101000的设备在其内部0x19地址的寄存器中，写入0xAA这个数据
 
@@ -2166,7 +2166,7 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 - 对于不指定设别（Slave Address），在当前地址指针指示的地址下，读取从机数据（Data）
 
-![image-20221228195140964](/Users/puheliang/Library/Application Support/typora-user-images/image-20221228195140964.png)
+![image-20221228195140964](https://gitee.com/pu-heliang/photos/raw/master/img/202301032051730.png)
 
 - 在SCL高电平期间，拉低SDA，产生起始条件，主机首先发送一个字节，来进行从机的寻址和读写标志位，图示波形代表，本次寻址的目标是1101000的设备，读写标志为1，表示主机接下来想要读取设备，发送一个字节后，接收从机应答位，代表从机收到了第一个字节，把SDA的控制权交给从机，主机调用接收一个字节的时序，进行接收操作，从机接收到了主机的允许，可以在SCL低电平期间写入SDA，主机在哪SCL高电平期间读取SDA，主机再SCL高电平期间依次读取8位，就接收到了从机发送的一个字节数据0000 1111也就是（0x0F），没有指定地址这个环节，0x0F，（在从机中所有寄存器被分配到了一个线性区域中，会有个单独的指针变量，指示着其中一个寄存器，这个指针上电一般默认0地址，每写入一个字节或者读出一个字节后，这个指针就是自动自增一次，移动到下一个位置），从机返回的是当前指针指向的寄存器的值
 
@@ -2174,13 +2174,13 @@ void Serial_Printf(char *format, ...)//重定向printf多串口使用
 
 - 对于指定设备（Slave Address），在指定地址（Reg Address）下读取从机数据（Data）
 
-![image-20221225014731596](/Users/puheliang/Library/Application Support/typora-user-images/image-20221225014731596.png)
+![image-20221225014731596](https://gitee.com/pu-heliang/photos/raw/master/img/202301032052615.png)
 
 - 指定从机地址是1101000 读写标志位是0，代表要进行写的操作，经过从机应答后，在发送一个字节第二个字节0001 1001，用来指定地址，这个数据就写入到从机的地址指针里了，从机接收到这个地址后，它的寄存器指针就指向了0x19这个位置，不给从机发要写入的数据，而是再来个起始条件，起始条件后，重新寻址并且指定读写标志位，此时读写标志位为1代表开始读，继续主机接收一个字节，这个字节数据就是0x19地址下的数据。
 
 写多个字节：重复三遍，发送一个字节和接收应答，第一个数据就写入0x19的位置（写入一个地址后地址指针会自动+1，编程吧0x1A）第二个数据就会写到0x1A的位置，第三个数据写入的是0x1B的位置
 
-欧拉角：飞机与XYZ轴的夹角，反应了飞机的姿态，侧仰，上倾，下倾；
+S欧拉角：飞机与XYZ轴的夹角，反应了飞机的姿态，侧仰，上倾，下倾；
 
 获得欧拉角需要多个数据，常用的数据融合算法：互补滤波、卡尔曼滤波等
 
